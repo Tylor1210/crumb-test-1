@@ -1,11 +1,15 @@
 const asyncHandler = require('express-async-handler')
 
+const Product = require('../model/productModel')
+
 
 //@ desc   GET PRODUCTS 
 // @route  GET /API/PRODUCTS
 // @access Private
 const getProducts = asyncHandler(async (req, res) => {
-    res.status(200).json({ message: 'Get Products.' })
+    const products = await Product.find()
+
+    res.status(200).json({ products })
 })
 
 //@ desc   SET PRODUCTS 
@@ -16,14 +20,30 @@ const postProduct = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('Please add a text field.')
     }
-    res.status(200).json({ message: 'Posted Product .' })
+
+    const product = await Product.create({
+        text: req.body.text
+    })
+
+    res.status(200).json({ product })
 })
 
 //@ desc   UPDATE PRODUCT 
 // @route  GET /API/PRODUCTS:id
 // @access Private
 const updateProduct = asyncHandler(async (req, res) => {
-    res.status(200)
+    const product = await Product.findById(req.params.id)
+
+    if(!product){
+        res.status(400)
+        throw new Error('Product not found')
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, {
+        new: true
+    })
+    
+    res.status(200).json(updatedProduct)
     
 })
 
@@ -31,12 +51,22 @@ const updateProduct = asyncHandler(async (req, res) => {
 // @route  DELETE /API/PRODUCTS
 // @access Private
 const deleteProduct = asyncHandler(async (req, res) => {
-    res.status(200).json({ message: `Deleted Product ${req.params.id}.` })
+    const product = await Product.findById(req.params.id)
+
+    if(!product){
+        res.status(400)
+        throw new Error('Product not found')
+    }
+
+    await product.deleteOne()
+    
+    res.status(200).json({id: req.params.id})
 })
 
 
-
-
 module.exports = {
-    getProducts, postProduct, updateProduct, deleteProduct
+    getProducts, 
+    postProduct, 
+    updateProduct, 
+    deleteProduct
 }
