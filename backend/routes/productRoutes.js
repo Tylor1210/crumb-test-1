@@ -6,24 +6,19 @@ const {getProducts,
     deleteProduct
 } = require('../controllers/productController')
 
-
-
-////////////////////////////////////////////////////////////////////
-// COULD REPLACE THE FOUR UNDER WITH THIS BUT WE WONT //////////////////
-// router.route('/').get(getProducts).post(postProduct) /////////////
-// router.route('/:id').delete(deleteProduct).put(updateProduct) ///
-////////////////////////////////////////////////////////////////////
+const {protect} = require('../middleware/authMiddleware')
 
 
 
 
-router.get('/', getProducts)
+router.route('/').get(protect, getProducts).post(protect, postProduct) 
+router.route('/:id').delete(protect, deleteProduct).put(protect, updateProduct) 
 
-router.post('/', postProduct)
-
-router.put('/:id', updateProduct)
-
-router.delete('/:id', deleteProduct)
-
+//
+//router.get('/', protect, getProducts)
+//router.post('/', protect, postProduct)
+//router.put('/:id', protect, updateProduct)
+//router.delete('/:id', protect, deleteProduct)
+//
 
 module.exports = router
