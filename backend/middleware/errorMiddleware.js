@@ -5,7 +5,7 @@ const errorHandler = (err, req, res, nest) => {
 
     res.json({
         message: err.message,
-        // speciall error message attr. *only in dev mode send extra stack data //
+        // special error message attr. *only in dev mode send extra stack data //
         stack: process.env.NODE_ENV === 'production' ? null : err.stack
     })
 }
