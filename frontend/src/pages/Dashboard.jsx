@@ -1,6 +1,7 @@
 import{useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {useSelector} from 'react-redux'
+import ProductForm from '../components/ProductForm'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -17,6 +18,8 @@ function Dashboard() {
     <h1>Welcome {user && user.name}</h1>
     <p>Products Dashboard</p>
   </section>
+
+  <ProductForm />
   </>
 }
 
